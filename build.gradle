@@ -1,0 +1,33 @@
+plugins {
+	id 'org.springframework.boot' version '2.7.5'
+	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+	id 'java'
+}
+
+group = 'org.chun'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-freemarker' // freemarker, starter, context-support
+	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+	// postgresql
+	runtimeOnly('org.postgresql:postgresql:42.5.0')
+	// mybatis
+	implementation("org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2")
+	// Lombok
+	String lombokVersion = "1.18.24"
+	compileOnly("org.projectlombok:lombok:$lombokVersion")
+	testImplementation("org.projectlombok:lombok:$lombokVersion")
+	annotationProcessor("org.projectlombok:lombok:$lombokVersion")
+	testAnnotationProcessor("org.projectlombok:lombok:$lombokVersion")
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

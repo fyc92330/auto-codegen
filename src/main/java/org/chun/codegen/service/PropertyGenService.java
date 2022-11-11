@@ -271,6 +271,7 @@ public class PropertyGenService implements IProgrammingService {
         .sorted(Comparator.comparing(arr -> arr[2]))
         .forEach(arr -> tempMap.put(arr[0], arr[1]));
 
+    return tempMap;
   }
 
 }

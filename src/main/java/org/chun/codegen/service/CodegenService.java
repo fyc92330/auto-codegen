@@ -21,13 +21,18 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.Scanner;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
+
+import static org.chun.codegen.common.constant.CodegenConst.EXIT_COMMAND_ARRAY;
+import static org.chun.codegen.common.constant.CodegenConst.TABLE_NAME_REGEX;
 
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class CodegenService {
+public class CodegenService implements IProgrammingService {
 
   private static final String BASE_FOLDER_PATH = "/base";
   private final MetaDao metaDao;
@@ -35,11 +40,40 @@ public class CodegenService {
   private final freemarker.template.Configuration config;
 
   /**
+   * 創建者模式
+   */
+  @Override
+  public void main() throws Exception {
+    log.info("創建者模式: 輸入建立的table, 或輸入exit離開.");
+    try (Scanner scanner = new Scanner(System.in)) {
+      while (scanner.hasNextLine()) {
+        String input = scanner.nextLine().trim().toLowerCase();
+        // 離開程式
+        if (Arrays.asList(EXIT_COMMAND_ARRAY).contains(input)) {
+          break;
+        }
+        // 檢核輸入
+        if (input.isBlank() || !input.matches(TABLE_NAME_REGEX)) {
+          log.info("格式錯誤, 請輸入table名稱");
+          continue;
+        }
+        // 建立檔案
+        this.codeGenerate(input);
+      }
+      log.info("MyBatis關聯物件建立完成.");
+    } catch (Exception e) {
+      log.error("", e);
+    }
+  }
+
+  /** =================================================== private ================================================== */
+
+  /**
    * 製作coding物件
    *
    * @param tableName
    */
-  public void codeGenerate(String tableName) {
+  private void codeGenerate(String tableName) {
     this.mkdir();
     try {
       MetaTable table = this.getMetaTable(tableName);

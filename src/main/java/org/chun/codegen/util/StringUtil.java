@@ -6,6 +6,30 @@ public class StringUtil {
 
   private static final String UNDERLINE = "_";
 
+  public static String genPropertyFileName(String profile) {
+    return String.format("src/main/resources/application-%s.properties", profile);
+  }
+
+  public static String genPropertyResourceFolder(String name) {
+    return String.format("src/main/resources/%s", name);
+  }
+
+  public static String getActiveProfile(String propertyFileName) {
+    StringBuilder sb = new StringBuilder();
+    boolean flag = false;
+    for (char c : propertyFileName.toCharArray()) {
+      if ('.' == c) {
+        break;
+      } else if (flag) {
+        sb.append(c);
+      } else if ('-' == c) {
+        flag = true;
+      }
+    }
+
+    return sb.toString();
+  }
+
   public static String underscore2Cobra(@NonNull String underscore) {
     checkInputString(underscore);
     return handleString(underscore.toCharArray(), true);

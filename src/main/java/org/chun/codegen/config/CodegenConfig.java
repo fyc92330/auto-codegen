@@ -6,6 +6,7 @@ import org.chun.codegen.common.vo.CodegenEnvironment;
 import org.chun.codegen.props.OutputProperties;
 import org.chun.codegen.props.PackageProperties;
 import org.chun.codegen.props.TemplateProperties;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -40,5 +41,17 @@ public class CodegenConfig {
         outputProp.daoPath(),
         outputProp.mapperPath()
     );
+  }
+
+  @Bean(name = "isBuildingMode")
+  @ConditionalOnProperty(name = "mode", havingValue = "B")
+  public Boolean isBuilder() {
+    return true;
+  }
+
+  @Bean(name = "isBuildingMode")
+  @ConditionalOnProperty(name = "mode", havingValue = "S")
+  public Boolean isStander() {
+    return false;
   }
 }

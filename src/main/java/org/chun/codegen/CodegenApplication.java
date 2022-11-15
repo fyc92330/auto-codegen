@@ -14,7 +14,6 @@ import org.springframework.context.ConfigurableApplicationContext;
 @RequiredArgsConstructor
 @SpringBootApplication
 public class CodegenApplication implements CommandLineRunner {
-
   private final boolean isBuildingMode;
   private final CodegenService codegenService;
   private final PropertyGenService propertyGenService;

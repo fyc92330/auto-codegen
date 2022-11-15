@@ -48,7 +48,7 @@ public class InputValidatorUtil {
       if (StringUtils.endsWithIgnoreCase("Y", input) || StringUtils.endsWithIgnoreCase("N", input)) {
         break;
       } else {
-        log.error("參數錯誤, 不得為 Y,N 以外的參數");
+        log.error("參數錯誤, 不得為 Y,N 以外的參數. 請重新輸入: ");
       }
     } while (true);
     return input;

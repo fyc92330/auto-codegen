@@ -2,6 +2,8 @@ package org.chun.codegen.util;
 
 import lombok.NonNull;
 
+import java.util.Arrays;
+
 public class StringUtil {
 
   private static final String UNDERLINE = "_";
@@ -40,6 +42,11 @@ public class StringUtil {
     return handleString(underscore.toCharArray(), false);
   }
 
+  public static String concat(String... str){
+    StringBuilder sb = new StringBuilder();
+    Arrays.stream(str).forEach(sb::append);
+    return sb.toString();
+  }
   private static String handleString(char[] underscore, boolean cobra) {
     StringBuilder sb = new StringBuilder();
     boolean underline = false;

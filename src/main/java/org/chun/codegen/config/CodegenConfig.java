@@ -10,19 +10,21 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 @Slf4j
 @EnableConfigurationProperties(value = {PackageProperties.class, TemplateProperties.class, OutputProperties.class})
 @RequiredArgsConstructor
 @Configuration
 public class CodegenConfig {
-
   private final PackageProperties packageProp;
   private final TemplateProperties templateProp;
   private final OutputProperties outputProp;
 
-  @Bean
-  public CodegenEnvironment codegenEnvironment() {
+  @Bean(name = "builderMode")
+  @Primary
+  @ConditionalOnProperty(name = "mode", havingValue = "B")
+  public CodegenEnvironment builderEnv() {
     return new CodegenEnvironment(
         packageProp.voBase(),
         packageProp.voExtend(),
@@ -39,19 +41,32 @@ public class CodegenConfig {
         outputProp.mainDir(),
         outputProp.voPath(),
         outputProp.daoPath(),
-        outputProp.mapperPath()
+        outputProp.mapperPath(),
+        true
     );
   }
 
-  @Bean(name = "isBuildingMode")
-  @ConditionalOnProperty(name = "mode", havingValue = "B")
-  public Boolean isBuilder() {
-    return true;
-  }
-
-  @Bean(name = "isBuildingMode")
+  @Bean(name = "standerMode")
   @ConditionalOnProperty(name = "mode", havingValue = "S")
-  public Boolean isStander() {
-    return false;
+  public CodegenEnvironment standerEnv() {
+    return new CodegenEnvironment(
+        packageProp.voBase(),
+        packageProp.voExtend(),
+        packageProp.daoBase(),
+        packageProp.daoExtend(),
+        packageProp.mapperBase(),
+        packageProp.mapperExtend(),
+        templateProp.voBase(),
+        templateProp.voExtend(),
+        templateProp.daoBase(),
+        templateProp.daoExtend(),
+        templateProp.mapperBase(),
+        templateProp.mapperExtend(),
+        outputProp.mainDir(),
+        outputProp.voPath(),
+        outputProp.daoPath(),
+        outputProp.mapperPath(),
+        false
+    );
   }
 }

@@ -2,6 +2,7 @@ package org.chun.codegen;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.chun.codegen.common.vo.CodegenEnvironment;
 import org.chun.codegen.service.CodegenService;
 import org.chun.codegen.service.IProgrammingService;
 import org.chun.codegen.service.PropertyGenService;
@@ -9,12 +10,15 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Bean;
+
+import java.beans.BeanProperty;
 
 @Slf4j
 @RequiredArgsConstructor
 @SpringBootApplication
 public class CodegenApplication implements CommandLineRunner {
-  private final boolean isBuildingMode;
+  private final CodegenEnvironment env;
   private final CodegenService codegenService;
   private final PropertyGenService propertyGenService;
   private final ConfigurableApplicationContext application;
@@ -25,6 +29,7 @@ public class CodegenApplication implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
+    log.info("{}", env);
     log.info("開始執行codegen程式");
     this.gateway().main();
     SpringApplication.exit(application);
@@ -36,7 +41,7 @@ public class CodegenApplication implements CommandLineRunner {
    * @return
    */
   private IProgrammingService gateway() {
-    return isBuildingMode
+    return env.getIsBuilderMode()
         ? codegenService
         : propertyGenService;
   }

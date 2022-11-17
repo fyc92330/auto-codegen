@@ -24,4 +24,6 @@ public class CodegenEnvironment {
   private String outputVoPath;
   private String outputDaoPath;
   private String outputMapperPath;
+
+  private Boolean isBuilderMode;
 }
